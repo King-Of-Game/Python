@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import requests
 import lxml.html
-from multiprocessing import Pool
+
 
 
 # 得到当前页面的文本信息
@@ -66,11 +66,7 @@ if __name__ == '__main__':
 
 
 
-    # pool = Pool(30)
-    # for i in range(10):
-    #     pool.apply_async(getBook, (i,))# 创建一个进程
-    # pool.close()
-    # pool.join() # 加上这个就是让子进程结束，主进程才会结束。
+ 
 
 
 
