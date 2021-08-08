@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户查询界面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}"  media="all">
+    <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'layui/layui.js' %}"></script>
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+<div class="demoTable">
+
+    <div class="layui-inline">
+        <input class="layui-input" name="aOrN" id="demoReload" autocomplete="off" placeholder="模糊查询：用户名或昵称">
+    </div>
+    <button type="button" class="layui-btn" data-type="reload">搜索</button>
+</div>
+
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        {% comment %}   <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>{% endcomment %}
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="updatePwd" >修改密码</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="resetPwd">重置密码</a>
+</script>
+
+
+<script src="{% static 'layui/layui.js' %}" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+    // 检查Session，如果session对象没有值，就返回登录界面
+    function checkSession() {
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+        });
+
+        $.ajax({
+            url:'{% url 'getSession' %}',
+            type: "get",
+            success: function (data) {
+                if (data["nickname"] == ""){
+                    alert('Session失效，请重新登录');
+                    window.top.location.href = {% url 'login' %}
+                }
+            },
+            error: function () {
+                alert('Session失效，请重新登录');
+                window.top.location.href = {% url 'login' %}
+            }
+        });
+
+    }
+
+
+    layui.use('table', function () {
+        var table = layui.table;
+        //从后端得到数据生成表格
+        table.render({
+            elem: '#test'
+            ,url:'{% url 'getUserByRole' %}'
+            ,where: {
+                        aOrN: ''
+                    }
+            ,cellMinWidth: 80
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }]
+            ,title: '用户数据表'
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'account', title:'用户名', align:'center', sort:true}
+                ,{field:'password', title:'密码', align:'center', edit:'text'}
+                ,{field:'nickname', title:'昵称', align:'center'}
+                ,{field:'sex', title:'性别', align:'center'}
+                ,{field:'birthday', title:'出生日期', align:'center'}
+                ,{field:'phone', title:'电话', align:'center'}
+                ,{field:'address', title:'地址', align:'center'}
+                ,{field:'roleID', title:'角色身份', align:'center', sort:true}
+                {% comment %}      ,{field:'email', title:'邮箱', width:150, edit: 'text', templet: function(res){
+                        return '<em>'+ res.email +'</em>'
+                      }}{% endcomment %}
+                ,{fixed: 'right', title:'操作', align:'center', toolbar: '#barDemo'}
+            ]]
+            ,id: 'testReload'
+            ,page: true
+
+        });
+
+
+        var $ = layui.$, active = {
+            reload: function(){
+                var demoReload = $('#demoReload');
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        aOrN: demoReload.val()
+                    }
+                }, 'data');
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            };
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            var account = data.account;
+            var password = data.password;
+            var roleID = data.roleID
+
+            //console.log(obj)
+            if(obj.event === 'updatePwd'){
+                $.ajaxSetup({
+                    data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+                });
+                $.ajax({
+                    url:"{% url 'updatePwd' %}",
+                    type:"post",
+                    data:{
+                        "account":account,
+                        "password":password
+                    },
+                    success:function (data) {
+                        alert(data);
+                        checkSession();
+                    }
+                })
+            }
+            else if (obj.event === 'resetPwd'){
+                $.ajaxSetup({
+                    data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+                });
+                $.ajax({
+                    url:"{% url 'resetPwd' %}",
+                    type:"post",
+                    data:{
+                        "account":account,
+                        "roleID":roleID
+                    },
+                    success:function (data) {
+                        //执行重载
+                        table.reload('testReload', {
+                            page: {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        }, 'data');
+                        checkSession();
+                    }
+                })
+
+            }
+
+        });
+    })
+
+</script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/static/icons/panda.ico">
+
+    <title>serial lists</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap-3.3.7/docs/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/static/bootstrap-3.3.7/docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+    <link href="/static/serialNumber/css/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/static/bootstrap-3.3.7/docs/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'index' %}">返回首页</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="javascript:search_item()">搜索</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input id="notNull" type="text" class="form-control" placeholder="Search..." data-toggle="popover" data-trigger="focus" data-placement="bottom" title="Tips" data-content="搜索内容不能为空！">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="{% url 'serial_list' 1 %}">serial list <span class="sr-only">(current)</span></a></li>
+{#                <li><a href="javascript:void(0)">test</a></li>#}
+
+            </ul>
+
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+
+            <h2 class="sub-header">Serial List</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>serial_number</th>
+                        <th>video_name</th>
+                        <th>author_name</th>
+                        <th>video_tag</th>
+                        <th>video_ticket</th>
+                        <th>publish_date</th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="serial_list">
+                    <!--<tr>
+                        <td>1</td>
+                        <td>Lorem</td>
+                        <td>ipsum</td>
+                        <td>dolor</td>
+                        <td>sit</td>
+                        <td>sit</td>
+                    </tr>-->
+                    {% for item in now_page %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.serial_number }}</td>
+                            <td>{{ item.video_name }}</td>
+                            <td>{{ item.author_name }}</td>
+                            <td>{{ item.video_tag }}</td>
+                            <td>{{ item.video_ticket }}</td>
+                            <td>{{ item.publish_date }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="text-right">
+                    {#                    <pre id="now_page" style="display:none;">1</pre>#}
+                    {#                    <pre id="total_page" style="display:none;"></pre>#}
+                    {#                    <button type="button" class="btn btn-xs btn-primary" onclick="firtPage()">首页</button>#}
+                    {#                    <button type="button" class="btn btn-xs btn-info" onclick="previousPage()">上一页</button>#}
+                    {#                    <button type="button" class="btn btn-xs btn-info" onclick="nextPage()">下一页</button>#}
+                    {#                    <button type="button" class="btn btn-xs btn-success" onclick="endPage()">尾页</button>#}
+                    {#                    <span id="page_info" class="label label-default"></span>#}
+
+                    {# 判断当前页是否有上一页#}
+                    {% if now_page.has_previous %}
+                        <a href="{% url 'serial_list' now_page.previous_page_number %}" >
+                            <span class="label label-info" >&laquo;</span></a>
+                    {% endif %}
+
+
+                    {# 循环遍历页码列表，并展示到底部#}
+                    {% for num in page_list%}
+                        {%if num == now_page.number%}
+                            <a href="javascript:void(0)">
+                                <span class="label label-primary">{{ num }}</span>
+                            </a>
+                        {%else%}
+                            <a href="{% url 'serial_list' num %}">
+                                <span class="label label-info">{{ num }}</span>
+                            </a>
+                        {%endif%}
+                    {% endfor %}
+
+                    {#判断当前页是否有下一页#}
+                    {% if now_page.has_next %}
+                        <a href="{% url 'serial_list' now_page.next_page_number %}" >
+                            <span class="label label-info" >&raquo;</span>
+                        </a>
+                    {% endif %}
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+{#<script src="/static/js/jquery-1.12.4.min.js"></script>#}
+<script src="/static/jquery-1.12.4.min.js"></script>
+
+<script>window.jQuery || document.write('<script src="/static/bootstrap-3.3.7/docs/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="/static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="/static/bootstrap-3.3.7/docs/assets/js/vendor/holder.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="/static/bootstrap-3.3.7/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+
+
+
+
+<script>
+
+    // 模糊查找
+    function search_item(){
+        const search_text = $("input.form-control").val()
+        if(search_text == ""){
+            $('#notNull').popover("show")
+            self.setTimeout("$('#notNull').popover('hide')",1000);
+        }
+        else{
+            $.ajax({
+                url:'/serialnumber/search_item',
+                type:'get',
+                data:{
+                    'search_text':search_text,
+                },
+                success:function (json) {
+                    //alert(json.data[0]['id']);
+                    $("#serial_list").empty();
+                    $("div.text-right").empty();
+
+                    for (var i=0; i<Object.keys(json.data).length; i++){
+                        var tr = "<tr>";
+                        tr += "<td>"+json.data[i]["id"]+"</td>";
+                        tr += "<td>"+json.data[i]["serial_number"]+"</td>";
+                        tr += "<td>"+json.data[i]["video_name"]+"</td>";
+                        tr += "<td>"+json.data[i]["author_name"]+"</td>";
+                        tr += "<td>"+json.data[i]["video_tag"]+"</td>";
+                        tr += "<td>"+json.data[i]["video_ticket"]+"</td>";
+                        tr += "<td>"+json.data[i]["publish_date"]+"</td>";
+                        tr += "</tr>";
+                        $("#serial_list").append(tr);
+
+                    }
+
+                }
+
+            })
+        }
+
+
+    }
+
+
+    $(function () {
+
+
+    })
+
+</script>
+
+
+
+
+</body>
+
+
+
+
+</html>

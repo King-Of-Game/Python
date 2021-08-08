@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息</title>
+    <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+</head>
+<body>
+<h1></h1>
+
+<script>
+
+    function getSession(){
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+        });
+        $.ajax({
+            url:"{% url 'getSession' %}",
+            type:"get",
+            success:function (data) {
+                var role = "";
+                if (data["roleID"] == "0"){
+                    role = "管理员"
+                }
+                else if (data["roleID"] == "1"){
+                    role = "教师"
+                }
+                else{
+                    role = "学生"
+                }
+                var msg = "欢迎"+data["nickname"]+"，你的身份是："+role+"。"
+                $("h1").text(msg);
+            },
+            error:function () {
+                window.top.location.href = {% url 'login' %}
+            }
+        })
+    }
+
+    $(function () {
+        getSession();
+    })
+
+
+</script>
+
+
+</body>
+</html>

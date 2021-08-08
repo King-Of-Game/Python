@@ -1,0 +1,15 @@
+version: '3'
+
+services: 
+    redis:
+        image: 'redis:6.2.1'
+        restart: always
+        container_name: redis
+        hostname: redis
+        ports:
+            - 6379:6379
+        volumes:
+            - /var/www/tq_match_bigscreen_backend/deploy/redis.conf:/var/redis/redis.conf
+            - /var/www/tq_match_bigscreen_backend/deploy/dump.rdb:/var/redis/dump.rdb
+            - /etc/localtime:/etc/localtime:ro
+        command: redis-server /var/redis/redis.conf

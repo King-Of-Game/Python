@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/static/icons/panda.ico">
+
+    <title>影评信息</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap-3.3.7/docs/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/static/bootstrap-3.3.7/docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/douban/css/blog.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="/static/bootstrap-3.3.7/docs/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/static/bootstrap-3.3.7/docs/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="blog-masthead">
+    <div class="container">
+        <nav class="blog-nav">
+            <a class="blog-nav-item active" href="{% url 'film_reviews' film_detail.film_id 1 %}">Home</a>
+            <a class="blog-nav-item" href="{% url 'film_list' 1 %}">返回电影列表</a>
+            {#          <a class="blog-nav-item" href="#">Press</a>#}
+            {#          <a class="blog-nav-item" href="#">New hires</a>#}
+            {#          <a class="blog-nav-item" href="#">About</a>#}
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="blog-header">
+        <h1 class="blog-title">{{ film_detail.film_title }}</h1>
+        {#        <p class="lead blog-description">The official example template of creating a blog with Bootstrap.</p>#}
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+            {% for item in now_page %}
+                <div class="blog-post">
+                    <h3>
+
+                    </h3>
+                    <p class="blog-post-meta">
+                        {{ item.film_review_date }} by <a href="#">{{ item.film_review_user }}</a>
+                    </p>
+
+                    <p>
+                        {{ item.film_review }}
+                        <br>
+                        {{ item.film_review_up }} &nbsp;<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                    </p>
+
+                </div><!-- /.blog-post -->
+
+            {% endfor %}
+
+
+
+
+
+            <nav>
+                <ul class="pager">
+                    {# 判断当前页是否有上一页#}
+                    {% if now_page.has_previous %}
+                        <li><a href="{% url 'film_reviews' film_detail.film_id now_page.previous_page_number %}">Previous</a></li>
+                    {% endif %}
+
+
+                    {#判断当前页是否有下一页#}
+                    {% if now_page.has_next %}
+                        <li><a href="{% url 'film_reviews' film_detail.film_id now_page.next_page_number %}">Next</a></li>
+                    {% endif %}
+
+                    {% comment %}    <li><a href="#">Previous</a></li>
+                                  <li><a href="#">Next</a></li>{% endcomment %}
+
+                </ul>
+            </nav>
+
+        </div><!-- /.blog-main -->
+
+    </div><!-- /.row -->
+
+</div><!-- /.container -->
+
+<footer class="blog-footer">
+{#          <p>Blog template built for <a href="http://getbootstrap.com">Bootstrap</a> by <a href="{% url 'index' %}">yixuan</a>.</p>#}
+    <p>
+        <a href="#">Back to top</a>
+    </p>
+</footer>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/static/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="/static/bootstrap-3.3.7/docs/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="/static/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="/static/bootstrap-3.3.7/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>

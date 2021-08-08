@@ -1,0 +1,17 @@
+Flask==1.0.2
+Flask-Login==0.4.1
+Flask-Session==0.3.1
+Flask_SocketIO==5.1.0
+itsdangerous==1.1.0
+Jinja2==2.10
+redis==3.0.1
+MarkupSafe==1.1.0
+python-engineio==4.2.0
+python-socketio==5.3.0
+six==1.11.0
+Werkzeug==0.14.1
+eventlet==0.30.2
+gunicorn==20.1.0  # eventlet处理并发用gunicorn作Web Server（windows不需要安装）
+supervisor==4.2.2  # （windows不需要安装）
+
+

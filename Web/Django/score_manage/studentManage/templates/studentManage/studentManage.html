@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}" media="all">
+    <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'layui/layui.js' %}"></script>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">学生成绩后台管理系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left" style="display: block;">
+            <li class="layui-nav-item"><a href="javascript:void(0);" onclick="enterWelcome()">欢迎界面</a></li>
+            {% comment %}            <li class="layui-nav-item"><a href="">商品管理</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>{% endcomment %}
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    <span id="nickname"></span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:void(0);" onclick="enterWelcome()">基本资料</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="javascript:void(0);" onclick="clearSession()">退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+
+                <li id="subjectManagement" class="layui-nav-item">
+                    <a class="" href="javascript:;">选课管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:void(0);" onclick="chooseSubject()">开始选课</a></dd>
+                    </dl>
+                </li>
+
+                <li id="scoreManagement" class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">成绩管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:void(0);" onclick="scoreDetail()">成绩查询</a></dd>
+
+                    </dl>
+                </li>
+
+                {% comment %}                <li id="studnetManagement" class="layui-nav-item">
+                    <a class="" href="javascript:;">学生管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">学生查询</a></dd>
+                    </dl>
+                </li>{% endcomment %}
+
+                <li id="userManagement" class="layui-nav-item">
+                    <a class="" href="javascript:;">用户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:void(0);" onclick="userDetail()">用户查询</a></dd>
+                        <dd id="addAccount"><a href="javascript:void(0);" onclick="addAccount()">添加用户</a></dd>
+                    </dl>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body" style="overflow: hidden;">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px; height: 100%;">
+            <iframe id="iframe" src="{% url 'welcome' %}" scrolling="yes" frameborder="0" style="width: 100%; height: 100%; "></iframe>
+        </div>
+
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © 逸轩
+    </div>
+</div>
+
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+
+
+
+    // 检查Session，如果session对象没有值，就返回登录界面
+    function getSession() {
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+        });
+
+        $.ajax({
+            url:'{% url 'getSession' %}',
+            type: "get",
+            success: function (data) {
+                if (data["nickname"] == ""){
+                    alert('Session失效，请重新登录');
+                    window.location.href = {% url 'login' %}
+                }
+                else{
+                    $('#nickname').text(data["nickname"]);
+                }
+
+                if (data["roleID"] == "0" || data["roleID"] == "1") {
+                    $("#subjectManagement").css('display', 'none');
+                }
+
+                if (data["roleID"] == "1" || data["roleID"] == "2") {
+                    $("#addAccount").css('display', 'none');
+                }
+
+
+
+
+            },
+            error: function () {
+                alert('Session失效，请重新登录');
+                window.location.href = {% url 'login' %}
+            }
+        });
+
+    }
+
+    //退出登录并清除Session
+    function clearSession() {
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+        });
+
+        $.ajax({
+            url:'{% url 'clearSession' %}',
+            type: "post",
+            success: function (data) {
+                window.location.href = {% url 'login' %}
+            },
+            error: function () {
+                return;
+            }
+        });
+
+
+    }
+
+    //进入欢迎界面
+    function enterWelcome(){
+        $("#iframe").attr("src","{% url 'welcome' %}");
+    }
+
+    //进入开始选课界面
+    function chooseSubject(){
+        $("#iframe").attr("src", "{% url 'chooseSubject' %}");
+    }
+
+    //进入成绩查询界面
+    function scoreDetail(){
+        $("#iframe").attr("src","{% url 'scoreDetail' %}");
+    }
+
+    //进入用户查询界面
+    function userDetail(){
+        $("#iframe").attr("src", "{% url 'userDetail' %}");
+    }
+
+    //进入添加用户界面
+    function addAccount(){
+        $("#iframe").attr("src", "{% url 'addAccount' %}");
+    }
+
+
+
+
+
+    //页面初始化加载函数
+    $(function () {
+        getSession();
+    })
+</script>
+</body>
+</html>
