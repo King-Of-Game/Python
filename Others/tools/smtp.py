@@ -18,13 +18,13 @@ class Email:
         '''设置邮箱的域名，端口，发送者邮箱，接收者邮箱'''
         self.smtpHost = "smtp.qq.com"
         self.port = '465'
-        self.fromAddr = "871437338@qq.com"
+        self.fromAddr = "test@qq.com"
         self.password = "mpmcjenopidibefc"
-        self.toAddr = "yixuanker@163.com"
+        self.toAddr = "test@163.com"
 
         '''设置收信的端口，密码'''
         self.pop3Host = "pop.163.com"
-        self.receivePwd = "zx454049162"
+        self.receivePwd = "test"
 
         '''构建文本邮箱的主体'''
         self.body = "这是测试内容"
