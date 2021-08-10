@@ -11,10 +11,9 @@ class Node(object):
         self.next = None
 
 
-class SingleLinkList(object):
-
+class SingleLink(object):
     def __init__(self):
-        self.head = Node()
+        self.head = None
         self.length = 0
 
     def __len__(self):
@@ -22,44 +21,135 @@ class SingleLinkList(object):
 
     def __iter__(self):
         for node in self.iter_node():
-            yield node.value
+            yield node
 
     def iter_node(self):
         cur_node = self.head
-
         while cur_node is not None:
             yield cur_node
             cur_node = cur_node.next
 
     def insert_head(self, value):
-        node = Node(value)
-        node.next = self.head
-        self.head = node
-        self.length += 1
+        """
+        头部添加元素
+        """
+        try:
+            node = Node(value)
+            node.next = self.head
+            self.head = node
+            self.length += 1
+            return None
+        except Exception as e:
+            return e
 
     def append(self, value):
-        node = Node(value)
-
+        """
+        末尾添加元素
+        """
         if self.length == 0:
-            self.head = node
-        else:
+            err = self.insert_head(value)
+            if err is not None:
+                return err
+            return None
+        try:
             cur_node = self.head
             while cur_node.next is not None:
                 cur_node = cur_node.next
+            cur_node.next = Node(value)
+            self.length += 1
+            return None
+        except Exception as e:
+            return e
+
+    def insert(self, value, index):
+        """
+        指定索引添加元素
+        - value: 元素
+        - index: 索引
+        """
+        if index == 0:
+            err = self.insert_head(value)
+            return err
+        if index >= self.length:
+            err = self.append(value)
+            return err
+        try:
+            cur_node = self.head
+            node = Node(value)
+            while (index - 1) > 0:
+                cur_node = cur_node.next
+                index -= 1
+            node.next = cur_node.next
             cur_node.next = node
+            self.length += 1
+            return None
+        except Exception as e:
+            return e
 
-        self.length += 1
+    def remove_head(self):
+        """
+        删除头部元素
+        """
+        if self.length == 0:
+            self.head = None
+            return None
+        try:
+            self.head = self.head.next
+            self.length -= 1
+            return None
+        except Exception as e:
+            return e
 
+    def remove_end(self):
+        """
+        删除尾部元素
+        """
+        if self.length <= 1:
+            err = self.remove_head()
+            return err
+        try:
+            cur_node = self.head
+            while cur_node.next.next is not None:
+                cur_node = cur_node.next
+            cur_node.next = None
+            self.length -= 1
 
-            # cur_node = node
+        except Exception as e:
+            return e
+
+    def remove(self, index):
+        """
+        根据索引删除元素
+        """
+        if index == 0:
+            err = self.remove_head()
+            return err
+        try:
+            cur_node = self.head
+            while index-1 > 0:
+                cur_node = cur_node.next
+            cur_node.next = None
+            self.length -= 1
+            return None
+        except Exception as e:
+            return e
 
 
 if __name__ == '__main__':
-    sLinkList = SingleLinkList()
+    singleLink = SingleLink()
+    # 增
+    singleLink.append(3)
+    singleLink.insert_head(1)
+    singleLink.append(4)
+    singleLink.insert(value=2, index=1)
 
-    sLinkList.insert_head(2)
-    sLinkList.insert_head('jack')
-    print(f'当前链表元素: {[i for i in sLinkList]}')
+    # 删
+    # singleLink.remove_head()
+    # singleLink.remove_end()
+    # singleLink.remove(1)
+    for i in singleLink:
+        pass
+        # print(i, end=' ')
 
-    sLinkList.append('lucy')
-    print(f'当前链表元素: {[i for i in sLinkList]}')
+    for i in singleLink:
+        print(i.value, end=' ')

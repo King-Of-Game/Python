@@ -119,10 +119,19 @@ class DifferentSort:
             print(f'找不到目标元素')
 
 
+# 斐波那契数列
+def feibo(num):
+    a, b = 0, 1
+    while num:
+        print(a)
+        a, b = b, a + b
+        num -= 1
+
+
 if __name__ == '__main__':
-    non_sort_list = [3, 6, 8, 19, 1, 5]
-    print(f'排序前：{non_sort_list}')
-    difSort = DifferentSort(lst=non_sort_list)
+    # non_sort_list = [3, 6, 8, 19, 1, 5]
+    # print(f'排序前：{non_sort_list}')
+    # difSort = DifferentSort(lst=non_sort_list)
 
     # difSort.bubble_sort()
     # difSort.select_sort()
@@ -133,4 +142,6 @@ if __name__ == '__main__':
     # result = difSort.quick_sort(difSort.lst, reverse=1)
     # print(f'从大到小快速排序：{result}')
 
-    difSort.binary_search(difSort.lst, 0, difSort.length, 5)
+    # difSort.binary_search(difSort.lst, 0, difSort.length, 5)
+
+    feibo(7)

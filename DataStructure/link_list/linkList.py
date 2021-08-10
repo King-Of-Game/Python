@@ -37,7 +37,6 @@ class SingleLinkList(object):
             yield cur_node
             cur_node = cur_node.next
 
-
     # 链表头部添加元素
     def head_insert(self, value):
         node = Node(value)
@@ -116,12 +115,12 @@ class SingleLinkList(object):
 if __name__ == '__main__':
     singeLink = SingleLinkList()
     singeLink.append(2)
-    singeLink.append(3)
+    # singeLink.append(3)
     singeLink.head_insert(1)
-    singeLink.insert(2, 4)
+    # singeLink.insert(2, 4)
 
     print(f'当前单链表: {[i for i in singeLink]}')
 
-    singeLink.delete_node(3)
-    print(f'当前单链表: {[i for i in singeLink]}')
+    # singeLink.delete_node(3)
+    # print(f'当前单链表: {[i for i in singeLink]}')
 
