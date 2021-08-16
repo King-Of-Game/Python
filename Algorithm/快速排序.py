@@ -33,7 +33,7 @@ left:[3] mid:[5] right:[]
 
 
 # 快速排序：从小到大
-def quickSort(lst):
+def quickSort(lst, reverse=False):
     # 如果 == 1，那么 [] 执行以下代码，此时pivot[0]会报错
     if len(lst) <= 1:
         return lst
@@ -41,19 +41,9 @@ def quickSort(lst):
     left = [i for i in lst if i < pivot]  # 分治给左边的序列排序
     middle = [i for i in lst if i == pivot]
     right = [i for i in lst if i > pivot]  # 分治给右边的序列排序
+    if reverse:
+        return quickSort(right) + middle + quickSort(left)
     return quickSort(left) + middle + quickSort(right)
-
-
-# 快速排序：从大到小
-def quickSort1(lst):
-    # 如果 == 1，那么 [] 执行以下代码，此时pivot[0]会报错
-    if len(lst) <= 1:
-        return lst
-    pivot = lst[len(lst)//2]  # 基准值
-    left = [i for i in lst if i > pivot]  # 分治给左边的序列排序
-    middle = [i for i in lst if i == pivot]
-    right = [i for i in lst if i < pivot]  # 分治给右边的序列排序
-    return quickSort1(left) + middle + quickSort1(right)
 
 
 if __name__ == '__main__':
@@ -61,13 +51,7 @@ if __name__ == '__main__':
     # lst = random.sample(range(10), 10)
     print(f'排序前: {lst}')
 
-    # new_lst = quickSort(lst)
-    # print(f'从小到大快速排序后: {new_lst}')
-    new_lst = quickSort1(lst)
+    new_lst = quickSort(lst)
+    print(f'从小到大快速排序后: {new_lst}')
+    new_lst = quickSort(lst, reverse=True)
     print(f'从大到小快速排序后: {new_lst}')
-
-
-
-
-
-

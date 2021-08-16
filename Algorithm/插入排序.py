@@ -16,13 +16,12 @@
 # 从小到大排列
 def insertionSort(lst):
     for i in range(1, len(lst)):
-
         key = lst[i]
-        j = i - 1
-        while j >= 0 and key < lst[j]:
-            lst[j+1] = lst[j]
+        j = i
+        while j > 0 and key < lst[j-1]:
+            lst[j] = lst[j-1]
             j -= 1
-        lst[j+1] = key
+        lst[j] = key
 
     print(f'从小到大插入排序后: {lst}')
 
@@ -33,11 +32,11 @@ def insertionSort1(lst):
     for i in range(1, len(lst)):
 
         key = lst[i]
-        j = i - 1
-        while j >= 0 and key > lst[j]:
-            lst[j+1] = lst[j]
+        j = i
+        while j > 0 and key > lst[j-1]:
+            lst[j] = lst[j-1]
             j -= 1
-        lst[j+1] = key
+        lst[j] = key
 
     print(f'从大到小插入排序后: {lst}')
 
@@ -46,7 +45,7 @@ if __name__ == '__main__':
     lst = [0, 6, 1, 7, 8, 3, 9, 4, 5, 2]
     print(f'原始列表: {lst}')
 
-    # insertionSort(lst)
+    insertionSort(lst)
     insertionSort1(lst)
 
 

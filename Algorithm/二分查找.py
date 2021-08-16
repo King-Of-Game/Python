@@ -58,8 +58,8 @@ def binarySearch1(arr, left, right, search_item):
 if __name__ == '__main__':
     arr = [1, 3, 4, 6, 7, 8, 10, 13, 14]
     length = len(arr)
-    search_item = 2  # 被查找的元素
+    search_item = 15 # 被查找的元素
 
-    binarySearch(arr, 0, length-1, search_item)
-    # binarySearch1(arr, 0, length - 1, search_item)
+    binarySearch(arr, 0, length, search_item)
+    binarySearch1(arr, 0, length, search_item)
 

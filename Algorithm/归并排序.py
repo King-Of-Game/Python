@@ -29,7 +29,7 @@ def mergeSort1(lst):
     merged = []
     while left and right:
         merged.append(left.pop(0) if left[0] <= right[0] else right.pop(0))
-    merged.extend(right if right else left)  # 左边和右边列表经过上一步之后，如果某个列表有剩余元素，就把该列表合并到新列表中
+    merged.extend(left if left else right)  # 左边和右边列表经过上一步之后，如果某个列表有剩余元素，就把该列表合并到新列表中
     # print(merged)
     return merged
 
@@ -46,7 +46,7 @@ def mergeSort2(lst):
     merged = []
     while left and right:
         merged.append(left.pop(0) if left[0] >= right[0] else right.pop(0))
-    merged.extend(right if right else left)
+    merged.extend(left if left else right)
     # print(merged)
     return merged
 
@@ -55,8 +55,8 @@ if __name__ == '__main__':
     lst = [6, 202, 100, 301, 38, 8, 1]
     print(f"排序前: {lst}")
 
-    # new_lst = mergeSort1(lst)
-    # print(f"从小到大归并排序后: {new_lst}")
+    new_lst = mergeSort1(lst)
+    print(f"从小到大归并排序后: {new_lst}")
     new_lst = mergeSort2(lst)
     print(f"从大到小归并排序后: {new_lst}")
 
