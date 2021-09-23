@@ -44,6 +44,7 @@ class DifferentSort:
             j = i
             while j > 0 and key < self.lst[j - 1]:
                 self.lst[j] = self.lst[j - 1]
+
                 j -= 1
             self.lst[j] = key
         print(f'从小到大插入排序：{self.lst}')
@@ -107,10 +108,9 @@ class DifferentSort:
         right: 右边界
         """
         mid_index = (left + right) // 2
-        while right > left:
+        if right > left:
             if lst[mid_index] == target:
                 print(f'目标元素位于第{mid_index + 1}个')
-                break
             elif lst[mid_index] < target:
                 return self.binary_search(lst, lst, mid_index, target)
             else:
@@ -119,29 +119,47 @@ class DifferentSort:
             print(f'找不到目标元素')
 
 
-# 斐波那契数列
-def feibo(num):
-    a, b = 0, 1
-    while num:
-        print(a)
-        a, b = b, a + b
-        num -= 1
+
+
+
+
+def kuaisu(lst):
+    if len(lst) <= 1:
+        return lst
+    mid_index = len(lst) // 2
+    pivot = lst[mid_index]
+
+    left = [i for i in lst if i < pivot]
+    mid = [i for i in lst if i == pivot]
+    right = [i for i in lst if i > pivot]
+    return kuaisu(left) + mid + kuaisu(right)
+
+
+
+
 
 
 if __name__ == '__main__':
-    # non_sort_list = [3, 6, 8, 19, 1, 5]
-    # print(f'排序前：{non_sort_list}')
-    # difSort = DifferentSort(lst=non_sort_list)
+    non_sort_list = [3, 6, 8, 1, 5]
+    print(f'排序前：{non_sort_list}')
 
-    # difSort.bubble_sort()
-    # difSort.select_sort()
-    # difSort.insert_sort()
-    # difSort.hil_sort()
-    # result = difSort.quick_sort(difSort.lst)
-    # print(f'从小到大快速排序：{result}')
-    # result = difSort.quick_sort(difSort.lst, reverse=1)
-    # print(f'从大到小快速排序：{result}')
+    result = kuaisu(non_sort_list)
+    print(result)
 
-    # difSort.binary_search(difSort.lst, 0, difSort.length, 5)
 
-    feibo(7)
+
+
+
+
+# difSort = DifferentSort(lst=non_sort_list)
+
+# difSort.bubble_sort()
+# difSort.select_sort()
+# difSort.insert_sort()
+# difSort.hil_sort()
+# result = difSort.quick_sort(difSort.lst)
+# print(f'从小到大快速排序：{result}')
+# result = difSort.quick_sort(difSort.lst, reverse=1)
+# print(f'从大到小快速排序：{result}')
+
+# difSort.binary_search(difSort.lst, 0, difSort.length, 5)
