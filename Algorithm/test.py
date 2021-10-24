@@ -123,19 +123,22 @@ class DifferentSort:
 
 
 
-def kuaisu(lst):
-    if len(lst) <= 1:
-        return lst
-    mid_index = len(lst) // 2
-    pivot = lst[mid_index]
+def test(lst):
+    length = len(lst)
+    mid_index = length // 2
 
-    left = [i for i in lst if i < pivot]
-    mid = [i for i in lst if i == pivot]
-    right = [i for i in lst if i > pivot]
-    return kuaisu(left) + mid + kuaisu(right)
+    while mid_index:
+        for i in range(mid_index, length):
+            key = lst[i]
+            j = i
+            while j >= mid_index and key < lst[j-mid_index]:
+                lst[j] = lst[j-mid_index]
+                j -= mid_index
+            lst[j] = key
 
+        mid_index //= 2
 
-
+    return lst
 
 
 
@@ -143,8 +146,9 @@ if __name__ == '__main__':
     non_sort_list = [3, 6, 8, 1, 5]
     print(f'排序前：{non_sort_list}')
 
-    result = kuaisu(non_sort_list)
+    result = test(non_sort_list)
     print(result)
+
 
 
 

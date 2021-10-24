@@ -42,7 +42,7 @@ def quickSort(lst, reverse=False):
     middle = [i for i in lst if i == pivot]
     right = [i for i in lst if i > pivot]  # 分治给右边的序列排序
     if reverse:
-        return quickSort(right) + middle + quickSort(left)
+        return quickSort(right, reverse) + middle + quickSort(left, reverse)
     return quickSort(left) + middle + quickSort(right)
 
 

@@ -137,11 +137,12 @@ class SingleLink(object):
 
 if __name__ == '__main__':
     singleLink = SingleLink()
+
     # 增
-    singleLink.append(3)
+    # singleLink.append(3)
     singleLink.insert_head(1)
-    singleLink.append(4)
-    singleLink.insert(value=2, index=1)
+    # singleLink.append(4)
+    # singleLink.insert(value=2, index=1)
 
     # 删
     # singleLink.remove_head()

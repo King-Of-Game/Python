@@ -4,25 +4,25 @@
 # __date__ : 2021/4/25 16:51
 # __software__ : PyCharm
 
-import functools
 from decorator import decorator
+import time
 
 
-def decorator1(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        print('start')
-        result = func(*args, **kwargs)
-        print('end')
-        return result
-    return wrapper
+@decorator
+def wrapper(func, *args, **kwargs):
+    print('start timing')
+    start_time = time.time()
+    func(*args, **kwargs)
+    print(f"总耗时：{time.time() - start_time}")
 
 
-@decorator1
-def wrapped1():
-    print(f'{wrapped1.__name__}')
+@wrapper
+def func(*args, **kwargs):
+    print(f"func的签名：{func.__name__}")
+    for i in range(kwargs['num']):
+        print(i)
+        time.sleep(1)
 
 
 if __name__ == '__main__':
-    result = wrapped1()
-    print(result)
+    func(num=3)

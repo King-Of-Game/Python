@@ -11,7 +11,7 @@ class Node(object):
         self.next = None
 
 
-class SingleLink(object):
+class SingeLinkList(object):
     def __init__(self):
         self.head = None
         self.length = 0
@@ -25,131 +25,101 @@ class SingleLink(object):
 
     def iter_node(self):
         cur_node = self.head
-        while cur_node is not None:
+        while cur_node:
             yield cur_node
             cur_node = cur_node.next
 
     def insert_head(self, value):
-        """
-        头部添加元素
-        """
-        try:
-            node = Node(value)
-            node.next = self.head
-            self.head = node
-            self.length += 1
-            return None
-        except Exception as e:
-            return e
+        '''
+        头插法
+        '''
+        node = Node(value)
+        node.next = self.head
+        self.head = node
+        self.length += 1
 
     def append(self, value):
-        """
-        末尾添加元素
-        """
+        '''
+        尾插法
+        '''
         if self.length == 0:
-            err = self.insert_head(value)
-            if err is not None:
-                return err
-            return None
-        try:
-            cur_node = self.head
-            while cur_node.next is not None:
-                cur_node = cur_node.next
-            cur_node.next = Node(value)
-            self.length += 1
-            return None
-        except Exception as e:
-            return e
-
-    def insert(self, value, index):
-        """
-        指定索引添加元素
-        - value: 元素
-        - index: 索引
-        """
-        if index == 0:
-            err = self.insert_head(value)
-            return err
-        if index >= self.length:
-            err = self.append(value)
-            return err
-        try:
-            cur_node = self.head
+            self.insert_head(value)
+        else:
+            cur_node = None
+            for node in self.iter_node():
+                cur_node = node
             node = Node(value)
-            while (index - 1) > 0:
-                cur_node = cur_node.next
-                index -= 1
-            node.next = cur_node.next
             cur_node.next = node
             self.length += 1
-            return None
-        except Exception as e:
-            return e
+
+    def insert_into(self, value, index):
+        '''
+        指定位置插入节点
+        '''
+        if index == 0:
+            self.insert_head(value)
+        elif index >= self.length:
+            self.append(value)
+        else:
+            node = Node(value)
+            for cur_node in self.iter_node():
+                index -= 1
+                if index <= 0:
+                    node.next = cur_node.next
+                    cur_node.next = node
+                    self.length += 1
+                    break
 
     def remove_head(self):
-        """
-        删除头部元素
-        """
+        '''
+        头删
+        '''
         if self.length == 0:
-            self.head = None
-            return None
-        try:
+            pass
+        else:
             self.head = self.head.next
             self.length -= 1
-            return None
-        except Exception as e:
-            return e
 
-    def remove_end(self):
-        """
-        删除尾部元素
-        """
+    def remove(self):
+        '''
+        尾删
+        '''
         if self.length <= 1:
-            err = self.remove_head()
-            return err
-        try:
-            cur_node = self.head
-            while cur_node.next.next is not None:
-                cur_node = cur_node.next
-            cur_node.next = None
-            self.length -= 1
+            self.remove_head()
+        else:
+            for cur_node in self.iter_node():
+                if cur_node.next.next is None:
+                    cur_node.next = None
+                    self.length -= 1
+                    break
 
-        except Exception as e:
-            return e
 
-    def remove(self, index):
-        """
-        根据索引删除元素
-        """
-        if index == 0:
-            err = self.remove_head()
-            return err
-        try:
-            cur_node = self.head
-            while index-1 > 0:
-                cur_node = cur_node.next
-            cur_node.next = None
-            self.length -= 1
-            return None
-        except Exception as e:
-            return e
+
+
+
 
 
 if __name__ == '__main__':
-    singleLink = SingleLink()
+    single = SingeLinkList()
+
+    for i in single:
+        print(i.value)
+
     # 增
-    singleLink.append(3)
-    singleLink.insert_head(1)
-    singleLink.append(4)
-    singleLink.insert(value=2, index=1)
+    single.append(3)
+    single.append(5)
+    single.insert_head(1)
+    single.insert_into(2, 1)
+    single.insert_into(4, 3)
 
     # 删
-    # singleLink.remove_head()
-    # singleLink.remove_end()
-    # singleLink.remove(1)
-    for i in singleLink:
-        pass
-        # print(i, end=' ')
-
-    for i in singleLink:
+    single.remove_head()
+    single.remove()
+    single.remove()
+    single.remove()
+    single.remove()
+    for i in single:
         print(i.value, end=' ')
+
+    print('')
+    print(len(single))

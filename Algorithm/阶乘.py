@@ -20,10 +20,11 @@ def factorial(n):
 # 普通求阶乘
 def factorial1(n):
     result1 = 1
-    while n > 1:
+    while n:
         result1 *= n
         n -= 1
-    print(f'{number} 的阶乘是: {result1}')
+    return result
+
 
 
 if __name__ == '__main__':
@@ -32,4 +33,5 @@ if __name__ == '__main__':
     result = factorial(number)
     print(f'{number} 的阶乘是: {result}')
 
-    factorial1(number)
+    result = factorial1(number)
+    print(f'{number} 的阶乘是: {result}')
