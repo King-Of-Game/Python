@@ -9,7 +9,7 @@ MarkupSafe==1.1.0
 python-engineio==4.2.0
 python-socketio==5.3.0
 six==1.11.0
-Werkzeug==0.14.1
+Werkzeug==2.2.3
 eventlet==0.30.2
 gunicorn==20.1.0  # eventlet处理并发用gunicorn作Web Server（windows不需要安装）
 supervisor==4.2.2  # （windows不需要安装）
